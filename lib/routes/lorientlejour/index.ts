@@ -1,16 +1,16 @@
-import { Route } from '@/types';
+import path from 'node:path';
+
+import { load } from 'cheerio';
+import { FetchError } from 'ofetch';
+
+import { config } from '@/config';
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { config } from '@/config';
-import { FetchError } from 'ofetch';
-import { load } from 'cheerio';
-import { art } from '@/utils/render';
-import { getCurrentPath } from '@/utils/helpers';
-import path from 'node:path';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
+import timezone from '@/utils/timezone';
 
-const __dirname = getCurrentPath(import.meta.url);
 const key = '3d5_f6A(S$G_FD=2S(Dr6%7BW_h37@rE';
 
 export const route: Route = {
@@ -48,7 +48,7 @@ export const route: Route = {
     maintainers: ['quiniapiezoelectricity'],
     handler,
     description: `  ::: tip
-For example, the path for the sites https://today.lorientlejour.com/section/977-lebanon and https://www.lorientlejour.com/rubrique/1-liban would be /lorientlejour/977-lebanon and /lorientlejour/1-liban respectively. 
+For example, the path for the sites https://today.lorientlejour.com/section/977-lebanon and https://www.lorientlejour.com/rubrique/1-liban would be /lorientlejour/977-lebanon and /lorientlejour/1-liban respectively.
 Multiple categories seperated by '|' is also supported, e.g. /lorientlejour/977-lebanon|1-liban.
 :::`,
     radar: [

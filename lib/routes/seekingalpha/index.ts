@@ -1,11 +1,10 @@
-import { Route } from '@/types';
+import path from 'node:path';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
-import { art } from '@/utils/render';
 import { parseDate } from '@/utils/parse-date';
-import { getCurrentPath } from '@/utils/helpers';
-import path from 'node:path';
-const __dirname = getCurrentPath(import.meta.url);
+import { art } from '@/utils/render';
 
 const baseUrl = 'https://seekingalpha.com';
 
@@ -27,8 +26,8 @@ export const route: Route = {
     maintainers: ['TonyRL'],
     handler,
     description: `| Analysis | News | Transcripts | Press Releases | Related Analysis |
-  | -------- | ---- | ----------- | -------------- | ---------------- |
-  | analysis | news | transcripts | press-releases | related-analysis |`,
+| -------- | ---- | ----------- | -------------- | ---------------- |
+| analysis | news | transcripts | press-releases | related-analysis |`,
 };
 
 const getMachineCookie = () =>

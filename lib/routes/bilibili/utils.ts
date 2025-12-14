@@ -1,13 +1,13 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
+
+import CryptoJS from 'crypto-js';
 
 import { config } from '@/config';
 import md5 from '@/utils/md5';
 import ofetch from '@/utils/ofetch';
 import { art } from '@/utils/render';
-import CryptoJS from 'crypto-js';
-import path from 'node:path';
-import { MediaResult, ResultResponse, SeasonResult } from './types';
+
+import type { MediaResult, ResultResponse, SeasonResult } from './types';
 
 // a
 function randomHexStr(length) {
@@ -298,7 +298,11 @@ export const renderOGVDescription = (embed: boolean, img: string, description: s
     return rendered;
 };
 
-export const getVideoUrl = (bvid?: string) => (bvid ? `https://www.bilibili.com/blackboard/newplayer.html?isOutside=true&autoplay=true&danmaku=true&muted=false&highQuality=true&bvid=${bvid}` : undefined);
+export function getVideoUrl(bvid: string): string;
+export function getVideoUrl(bvid?: string): string | undefined;
+export function getVideoUrl(bvid?: string): string | undefined {
+    return bvid ? `https://www.bilibili.com/blackboard/newplayer.html?isOutside=true&autoplay=true&danmaku=true&muted=false&highQuality=true&bvid=${bvid}` : undefined;
+}
 export const getLiveUrl = (roomId?: string) => (roomId ? `https://www.bilibili.com/blackboard/live/live-activity-player.html?cid=${roomId}` : undefined);
 
 export default {

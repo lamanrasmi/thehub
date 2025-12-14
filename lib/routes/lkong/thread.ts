@@ -1,13 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
-import { viewThread, countReplies } from './query';
+import { countReplies, viewThread } from './query';
 
 export const route: Route = {
     path: '/thread/:id',

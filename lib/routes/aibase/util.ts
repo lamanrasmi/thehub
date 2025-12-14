@@ -1,12 +1,11 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
+
+import type { CheerioAPI } from 'cheerio';
 
 import ofetch from '@/utils/ofetch';
-import { CheerioAPI } from 'cheerio';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 const defaultSrc = '_static/ee6af7e.js';
 const defaultToken = 'djflkdsoisknfoklsyhownfrlewfknoiaewf';
@@ -59,12 +58,15 @@ const buildApiUrl = async ($: CheerioAPI) => {
     const apiTagProcUrl = new URL(`${token}/ai/GetAiProductOfTag.aspx`, apiRootUrl).href;
     // AI 资讯列表
     const apiInfoListUrl = new URL(`${token}/ai/GetAiInfoList.aspx`, apiRootUrl).href;
+    // AI 日报
+    const aILogListUrl = new URL(`${token}/ai/v2/GetAILogList.aspx`, apiRootUrl).href;
 
     return {
         apiRecommListUrl,
         apiRecommProcUrl,
         apiTagProcUrl,
         apiInfoListUrl,
+        aILogListUrl,
     };
 };
 
@@ -111,4 +113,4 @@ const processItems = (items: any[]): any[] =>
         };
     });
 
-export { rootUrl, processItems, buildApiUrl };
+export { buildApiUrl, processItems, rootUrl };

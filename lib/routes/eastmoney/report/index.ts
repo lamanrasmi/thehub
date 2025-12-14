@@ -1,18 +1,19 @@
-import { Route, ViewType } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
+import path from 'node:path';
+
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
+import { ViewType } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { getRatingChangeStr, getEpsOrPeStr } from '../utils';
 
-const __dirname = getCurrentPath(import.meta.url);
+import { getEpsOrPeStr, getRatingChangeStr } from '../utils';
 
 export const route: Route = {
     path: '/report/:category',
-    categories: ['finance', 'popular'],
+    categories: ['finance'],
     view: ViewType.Articles,
     example: '/eastmoney/report/strategyreport',
     parameters: {
@@ -44,8 +45,8 @@ export const route: Route = {
     maintainers: ['syzq'],
     handler,
     description: `| 策略报告       | 宏观研究    | 券商晨报     | 行业研究 | 个股研报 |
-  | -------------- | ----------- | ------------ | -------- | -------- |
-  | strategyreport | macresearch | brokerreport | industry | stock    |`,
+| -------------- | ----------- | ------------ | -------- | -------- |
+| strategyreport | macresearch | brokerreport | industry | stock    |`,
 };
 
 async function handler(ctx) {

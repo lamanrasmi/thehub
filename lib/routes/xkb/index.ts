@@ -1,13 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 export const route: Route = {
     path: '/:channel',
@@ -27,13 +25,13 @@ export const route: Route = {
     handler,
     description: `常用栏目 ID：
 
-  | 栏目名 | ID  |
-  | ------ | --- |
-  | 首页   | 350 |
-  | 重点   | 359 |
-  | 广州   | 353 |
-  | 湾区   | 360 |
-  | 天下   | 355 |`,
+| 栏目名 | ID  |
+| ------ | --- |
+| 首页   | 350 |
+| 重点   | 359 |
+| 广州   | 353 |
+| 湾区   | 360 |
+| 天下   | 355 |`,
 };
 
 async function handler(ctx) {
@@ -44,7 +42,7 @@ async function handler(ctx) {
         method: 'get',
         url: currentUrl,
         headers: {
-            siteId: '35',
+            siteId: 35,
         },
     });
 

@@ -1,12 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
-import got from '@/utils/got';
 import { load } from 'cheerio';
 import iconv from 'iconv-lite';
+
+import type { Route } from '@/types';
+import got from '@/utils/got';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const rootUrl = 'http://www.rsj.sh.gov.cn';
 
@@ -46,7 +45,8 @@ async function handler() {
     const $ = load(dataHtml);
 
     const items = $('kwap')
-        .map((_, item) => ({
+        .toArray()
+        .map((item) => ({
             title: $(item).find('kaosxmmc').text(),
             link: `http://www.rsj.sh.gov.cn/ksyzc/index801.jsp`,
             description: art(path.join(__dirname, './templates/ksxm.art'), {
@@ -56,8 +56,7 @@ async function handler() {
                 registrationDeadline: $(item).find('baomksrq_A300').text(),
             }),
             guid: `${$(item).find('kaosrq').text()}${$(item).find('kaosxmmc').text()}`,
-        }))
-        .get();
+        }));
 
     return {
         title: '上海市职业能力考试院 - 考试项目',

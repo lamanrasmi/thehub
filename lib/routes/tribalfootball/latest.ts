@@ -1,13 +1,12 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { art } from '@/utils/render';
-import path from 'node:path';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 
 const rssUrl = 'https://www.tribalfootball.com/rss/mediafed/general/rss.xml';
 
@@ -29,7 +28,8 @@ async function handler() {
     const rss = await got(rssUrl);
     const $ = load(rss.data, { xmlMode: true });
     const items = $('rss > channel > item')
-        .map((_, item) => {
+        .toArray()
+        .map((item) => {
             const $item = $(item);
             let link = $item.find('link').text();
             link = new URL(link);
@@ -44,8 +44,7 @@ async function handler() {
                 author: $item.find(String.raw`dc\:creator`).text(),
                 _header_image: $item.find('enclosure').attr('url'),
             };
-        })
-        .get();
+        });
 
     await Promise.all(
         items.map((item) =>

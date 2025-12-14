@@ -1,18 +1,20 @@
-import { Route, ViewType } from '@/types';
-import ofetch from '@/utils/ofetch';
+import path from 'node:path';
+
 import * as cheerio from 'cheerio';
 import type { Context } from 'hono';
-import { ChartTitleSearchConnection } from './types';
-import path from 'node:path';
-import { getCurrentPath } from '@/utils/helpers';
+
+import type { Route } from '@/types';
+import { ViewType } from '@/types';
+import ofetch from '@/utils/ofetch';
 import { art } from '@/utils/render';
 
-const __dirname = getCurrentPath(import.meta.url);
-const render = (data) => art(path.join(__dirname, 'templates', 'chart.art'), data);
+import type { ChartTitleSearchConnection } from './types';
+
+const render = (data) => art(path.join(__dirname, 'templates/chart.art'), data);
 
 export const route: Route = {
     path: '/chart/:chart?',
-    categories: ['multimedia', 'popular'],
+    categories: ['multimedia'],
     view: ViewType.Notifications,
     parameters: {
         chart: {
@@ -37,8 +39,8 @@ export const route: Route = {
     handler,
     url: 'www.imdb.com/chart/top/',
     description: `| Top 250 Movies | Most Popular Movies | Top 250 TV Shows | Most Popular TV Shows |
-  | -------------- | ------------------- | ---------------- | --------------------- |
-  | top            | moviemeter          | toptv            | tvmeter               |`,
+| -------------- | ------------------- | ---------------- | --------------------- |
+| top            | moviemeter          | toptv            | tvmeter               |`,
 };
 
 async function handler(ctx: Context) {

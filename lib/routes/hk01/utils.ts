@@ -1,10 +1,8 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
 import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const rootUrl = 'https://hk01.com';
 const apiRootUrl = 'https://web-data.api.hk01.com';
@@ -41,4 +39,4 @@ const ProcessItems = (items, limit, tryGet) =>
             )
     );
 
-export { rootUrl, apiRootUrl, ProcessItems };
+export { apiRootUrl, ProcessItems, rootUrl };

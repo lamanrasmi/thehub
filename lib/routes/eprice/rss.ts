@@ -1,15 +1,15 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import InvalidParameterError from '@/errors/types/invalid-parameter';
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import parser from '@/utils/rss-parser';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import InvalidParameterError from '@/errors/types/invalid-parameter';
+import parser from '@/utils/rss-parser';
+
 const allowRegion = new Set(['tw', 'hk']);
 
 export const route: Route = {
@@ -30,9 +30,9 @@ export const route: Route = {
     handler,
     description: `地区：
 
-  | hk   | tw   |
-  | ---- | ---- |
-  | 香港 | 台湾 |`,
+| hk   | tw   |
+| ---- | ---- |
+| 香港 | 台湾 |`,
 };
 
 async function handler(ctx) {

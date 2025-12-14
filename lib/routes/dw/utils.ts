@@ -1,11 +1,12 @@
+import path from 'node:path';
+
+import type { CheerioAPI } from 'cheerio';
+import { load } from 'cheerio';
+
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load, type CheerioAPI } from 'cheerio';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { getCurrentPath } from '@/utils/helpers';
 
-const __dirname = getCurrentPath(import.meta.url);
 const formatId = '605';
 
 const i18n = (word: string, lang: string) => {

@@ -1,23 +1,22 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
-import { getSubPath } from '@/utils/common-utils';
-import cache from '@/utils/cache';
-import ofetch from '@/utils/ofetch';
 import { load } from 'cheerio';
-import timezone from '@/utils/timezone';
+
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
+import { getSubPath } from '@/utils/common-utils';
+import ofetch from '@/utils/ofetch';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 export const route: Route = {
     path: '/stats/*',
     name: '国家统计局 通用',
     url: 'www.stats.gov.cn',
     categories: ['government'],
-    maintainers: ['bigfei', 'nczitzk'],
-    example: '/stats/sj/zxfb',
+    maintainers: ['bigfei', 'nczitzk', 'reply2future'],
+    example: '/gov/stats/sj/zxfb',
     handler,
     radar: [
         {
@@ -108,18 +107,14 @@ async function handler(ctx) {
                     return item;
                 }
 
-                try {
-                    item.author = detailResponse.data.match(/来源：(.*?)</)[1].trim();
-                } catch {
-                    item.author = content('div.detail-title-des h2 span').first().text().split(':').pop().trim();
-                }
+                item.author = detailResponse.match(/来源：(.*?)</)?.[1]?.trim();
 
                 content('.pchide').remove();
 
                 item.title = item.title || content('div.detail-title h1').text();
                 item.pubDate = timezone(parseDate(content('div.detail-title-des h2 p, .info').first().text().trim()), +8);
                 item.description = art(path.join(__dirname, 'templates/description.art'), {
-                    description: content('.TRS_Editor').html(),
+                    description: content('.TRS_Editor').html() || content('.TRS_UEDITOR').html(),
                     attachments: content('a[oldsrc]')
                         .toArray()
                         .map((a) => {

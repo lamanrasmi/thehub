@@ -1,16 +1,16 @@
-import { Route, ViewType } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import { getSubPath } from '@/utils/common-utils';
-import cache from '@/utils/cache';
-import got from '@/utils/got';
-import { load } from 'cheerio';
-import { parseDate } from '@/utils/parse-date';
-import { art } from '@/utils/render';
 import path from 'node:path';
+
+import { load } from 'cheerio';
+
 import { config } from '@/config';
 import ConfigNotFoundError from '@/errors/types/config-not-found';
+import type { Route } from '@/types';
+import { ViewType } from '@/types';
+import cache from '@/utils/cache';
+import { getSubPath } from '@/utils/common-utils';
+import got from '@/utils/got';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 
 const toSize = (raw) => {
     const matches = raw.match(/(\d+(\.\d+)?)(\w+)/);
@@ -29,7 +29,7 @@ export const route: Route = {
     ],
     name: 'Works',
     maintainers: ['MegrezZhu', 'CoderTonyChan', 'nczitzk', 'Felix2yu'],
-    categories: ['multimedia', 'popular'],
+    categories: ['multimedia'],
     view: ViewType.Videos,
     handler,
     url: 'www.javbus.com',
@@ -38,6 +38,9 @@ export const route: Route = {
         path: {
             description: 'Any path of list page on javbus',
         },
+    },
+    features: {
+        nsfw: true,
     },
 };
 
@@ -157,7 +160,7 @@ async function handler(ctx) {
                         });
 
                     if (magnets) {
-                        item.enclosure_url = magnets.sort((a, b) => b.score - a.score)[0].link;
+                        item.enclosure_url = magnets.toSorted((a, b) => b.score - a.score)[0].link;
                         item.enclosure_type = 'application/x-bittorrent';
                     }
                 } catch {

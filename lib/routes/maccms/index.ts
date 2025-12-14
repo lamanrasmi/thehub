@@ -1,13 +1,13 @@
-import { Result, Vod } from '@/routes/maccms/type';
-import { DataItem, Route } from '@/types';
-import ofetch from '@/utils/ofetch';
 import path from 'node:path';
+
+import type { Result, Vod } from '@/routes/maccms/type';
+import type { DataItem, Route } from '@/types';
+import ofetch from '@/utils/ofetch';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
 import timezone from '@/utils/timezone';
-import { getCurrentPath } from '@/utils/helpers';
 
-const render = (vod: Vod, link: string) => art(path.join(getCurrentPath(import.meta.url), 'templates', 'vod.art'), { vod, link });
+const render = (vod: Vod, link: string) => art(path.join(__dirname, 'templates/vod.art'), { vod, link });
 
 export const route: Route = {
     path: '/:domain/:type?/:size?',
@@ -54,7 +54,7 @@ export const route: Route = {
             title: each.vod_name,
             image: each.vod_pic,
             link: `https://${domain}/vod/${each.vod_id}/`,
-            guid: each.vod_play_url?.match(/https:\/\/.+?\.m3u8/g)?.slice(-1)[0],
+            guid: each.vod_play_url?.match(/https:\/\/.+?\.m3u8/g)?.at(-1),
             pubDate: timezone(parseDate(each.vod_time, 'YYYY-MM-DD HH:mm:ss'), +8),
             category: [each.type_name, ...each.vod_class!.split(',')],
             description: render(each, `https://${domain}/vod/${each.vod_id}/`) + each.vod_content,

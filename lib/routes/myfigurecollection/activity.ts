@@ -1,15 +1,14 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
-import got from '@/utils/got';
 import { load } from 'cheerio';
-import timezone from '@/utils/timezone';
+
+import InvalidParameterError from '@/errors/types/invalid-parameter';
+import type { Route } from '@/types';
+import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 import { isValidHost } from '@/utils/valid-host';
-import InvalidParameterError from '@/errors/types/invalid-parameter';
 
 export const route: Route = {
     path: '/activity/:category?/:language?/:latestAdditions?/:latestEdits?/:latestAlerts?/:latestPictures?',
@@ -43,28 +42,28 @@ export const route: Route = {
     url: 'zh.myfigurecollection.net/browse',
     description: `Category
 
-  | Figures | Goods | Media |
-  | ------- | ----- | ----- |
-  | 0       | 1     | 2     |
+| Figures | Goods | Media |
+| ------- | ----- | ----- |
+| 0       | 1     | 2     |
 
   Language
 
-  | Id | Language   |
-  | -- | ---------- |
-  |    | en         |
-  | de | Deutsch    |
-  | es | Español    |
-  | fi | Suomeksi   |
-  | fr | Français   |
-  | it | Italiano   |
-  | ja | 日本語     |
-  | nl | Nederlands |
-  | no | Norsk      |
-  | pl | Polski     |
-  | pt | Português  |
-  | ru | Русский    |
-  | sv | Svenska    |
-  | zh | 中文       |`,
+| Id | Language   |
+| -- | ---------- |
+|    | en         |
+| de | Deutsch    |
+| es | Español    |
+| fi | Suomeksi   |
+| fr | Français   |
+| it | Italiano   |
+| ja | 日本語     |
+| nl | Nederlands |
+| no | Norsk      |
+| pl | Polski     |
+| pt | Português  |
+| ru | Русский    |
+| sv | Svenska    |
+| zh | 中文       |`,
 };
 
 async function handler(ctx) {

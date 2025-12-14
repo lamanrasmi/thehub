@@ -1,12 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { getUuid, getBook, getChapter, getChapters, getImgEncrypted, getImgKey, decrypt, getRealKey, apiHost } from './utils';
+
+import { apiHost, decrypt, getBook, getChapter, getChapters, getImgEncrypted, getImgKey, getRealKey, getUuid } from './utils';
 
 export const route: Route = {
     path: '/book/:id/:coverOnly?/:quality?',
@@ -44,7 +43,7 @@ async function handler(ctx) {
 
     const items = await Promise.all(
         chapters.chapters
-            .sort((a, b) => b.idx - a.idx)
+            .toSorted((a, b) => b.idx - a.idx)
             .slice(0, ctx.req.query('limit') ? Number.parseInt(ctx.req.query('limit'), 10) : 3)
             .map(async (c) => {
                 let pages;

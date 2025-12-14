@@ -1,10 +1,8 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import got from '@/utils/got';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 export const route: Route = {
     path: '/movie/weekly/:type?',
@@ -23,8 +21,8 @@ export const route: Route = {
     maintainers: ['numm233', 'nczitzk'],
     handler,
     description: `| 一周口碑电影榜      | 华语口碑剧集榜            |
-  | ------------------- | ------------------------- |
-  | movie\_weekly\_best | tv\_chinese\_best\_weekly |`,
+| ------------------- | ------------------------- |
+| movie\_weekly\_best | tv\_chinese\_best\_weekly |`,
 };
 
 async function handler(ctx) {

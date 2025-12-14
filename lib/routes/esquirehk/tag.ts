@@ -1,15 +1,13 @@
-import { Route } from '@/types';
-
-import ofetch from '@/utils/ofetch';
-import * as cheerio from 'cheerio';
-import cache from '@/utils/cache';
-import { parseDate } from '@/utils/parse-date';
-import { art } from '@/utils/render';
 import path from 'node:path';
+
+import * as cheerio from 'cheerio';
 import { destr } from 'destr';
 
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
+import ofetch from '@/utils/ofetch';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 
 const topics = new Set(['style', 'watches', 'lifestyle', 'health', 'money-investment', 'gear', 'people', 'watch', 'mens-talk']);
 
@@ -65,7 +63,7 @@ const handler = async (ctx) => {
 
                 item.description =
                     response.intro.raw +
-                    art(path.join(__dirname, 'templates', 'subpages.art'), {
+                    art(path.join(__dirname, 'templates/subpages.art'), {
                         subpages: response.subpages,
                     });
                 item.pubDate = parseDate(response.date.published, 'X');

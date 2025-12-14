@@ -1,11 +1,10 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import got from '@/utils/got';
-import { load } from 'cheerio';
-import { art } from '@/utils/render';
 import path from 'node:path';
+
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
+import got from '@/utils/got';
+import { art } from '@/utils/render';
 
 export const route: Route = {
     path: '/explore',
@@ -39,34 +38,30 @@ async function handler() {
     return {
         title: '豆瓣-浏览发现',
         link: 'https://www.douban.com/explore',
-        item:
-            list &&
-            list
-                .map((_, item) => {
-                    item = $(item);
+        item: list.toArray().map((item) => {
+            item = $(item);
 
-                    const title = item.find('.title a').first().text() ?? '#' + item.find('.icon-topic').text();
-                    const desc = item.find('.content p').text();
-                    const itemPic = item.find('a.cover').attr('style')
-                        ? item
-                              .find('a.cover')
-                              .attr('style')
-                              .match(/\('(.*?)'\)/)[1]
-                        : '';
-                    const author = item.find('.usr-pic a').last().text();
-                    const link = item.find('.title a').attr('href') ?? item.find('.icon-topic a').attr('href');
+            const title = item.find('.title a').first().text() ?? '#' + item.find('.icon-topic').text();
+            const desc = item.find('.content p').text();
+            const itemPic = item.find('a.cover').attr('style')
+                ? item
+                      .find('a.cover')
+                      .attr('style')
+                      .match(/\('(.*?)'\)/)[1]
+                : '';
+            const author = item.find('.usr-pic a').last().text();
+            const link = item.find('.title a').attr('href') ?? item.find('.icon-topic a').attr('href');
 
-                    return {
-                        title,
-                        author,
-                        description: art(path.join(__dirname, '../templates/explore.art'), {
-                            author,
-                            desc,
-                            itemPic,
-                        }),
-                        link,
-                    };
-                })
-                .get(),
+            return {
+                title,
+                author,
+                description: art(path.join(__dirname, '../templates/explore.art'), {
+                    author,
+                    desc,
+                    itemPic,
+                }),
+                link,
+            };
+        }),
     };
 }

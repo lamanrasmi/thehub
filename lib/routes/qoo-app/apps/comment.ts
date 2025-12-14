@@ -1,14 +1,14 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import got from '@/utils/got';
-import { load } from 'cheerio';
-import { parseDate } from '@/utils/parse-date';
-import timezone from '@/utils/timezone';
-import { appsUrl } from '../utils';
-import { art } from '@/utils/render';
 import path from 'node:path';
+
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
+import got from '@/utils/got';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
+import timezone from '@/utils/timezone';
+
+import { appsUrl } from '../utils';
 
 export const route: Route = {
     path: '/apps/:lang?/comment/:id',
@@ -27,8 +27,8 @@ export const route: Route = {
     maintainers: ['TonyRL'],
     handler,
     description: `| 中文 | English | 한국어 | Español | 日本語 | ไทย | Tiếng Việt |
-  | ---- | ------- | ------ | ------- | ------ | --- | ---------- |
-  |      | en      | ko     | es      | ja     | th  | vi         |`,
+| ---- | ------- | ------ | ------- | ------ | --- | ---------- |
+|      | en      | ko     | es      | ja     | th  | vi         |`,
 };
 
 async function handler(ctx) {

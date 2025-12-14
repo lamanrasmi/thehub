@@ -1,11 +1,10 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import got from '@/utils/got';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { load } from 'cheerio';
 
 const host = 'https://www.ymgal.games';
 
@@ -25,6 +24,7 @@ export const route: Route = {
         supportBT: false,
         supportPodcast: false,
         supportScihub: false,
+        nsfw: true,
     },
     radar: [
         {
@@ -52,7 +52,7 @@ async function handler() {
             item = $(item);
             const itemPicUrl = item.find('.lazy').first().attr('data-original');
             const tags = item.find('.tag-info-list').children();
-            const taginfo = tags.map((i, elem) => $(elem).text()).get();
+            const taginfo = tags.toArray().map((elem) => $(elem).text());
             return {
                 title: item.attr('title'),
                 link: `${host}${item.attr('href')}`,

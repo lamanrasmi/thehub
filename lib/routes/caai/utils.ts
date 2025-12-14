@@ -1,11 +1,10 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
 import { load } from 'cheerio';
+
 import got from '@/utils/got';
-import { art } from '@/utils/render';
-import path from 'node:path';
 import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 import timezone from '@/utils/timezone';
 
 const base = 'http://www.caai.cn';

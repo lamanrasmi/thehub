@@ -1,12 +1,10 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import cache from '@/utils/cache';
 
 const endPoints = {
     zh: {
@@ -106,9 +104,7 @@ async function handler(ctx) {
     const language = ctx.req.param('lang') ?? 'en';
     const productInfo = await getProductInfo(model, language);
     const biosAPI =
-        language === 'zh'
-            ? `https://www.asus.com.cn/support/api/product.asmx/GetPDBIOS?website=cn&model=${model}&pdid=${productInfo.productID}&sitelang=cn`
-            : `https://www.asus.com/support/api/product.asmx/GetPDBIOS?website=global&model=${model}&pdid=${productInfo.productID}&sitelang=en`;
+        language === 'zh' ? `https://www.asus.com.cn/support/api/product.asmx/GetPDBIOS?website=cn&model=${model}&sitelang=cn` : `https://www.asus.com/support/api/product.asmx/GetPDBIOS?website=global&model=${model}&sitelang=en`;
 
     const response = await ofetch(biosAPI);
     const biosList = response.Result.Obj[0].Files;

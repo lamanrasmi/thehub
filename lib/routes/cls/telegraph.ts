@@ -1,13 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
-import { rootUrl, getSearchParams } from './utils';
+import { getSearchParams, rootUrl } from './utils';
 
 const categories = {
     watch: '看盘',
@@ -44,8 +42,8 @@ export const route: Route = {
     handler,
     url: 'cls.cn/telegraph',
     description: `| 看盘  | 公司         | 解读    | 加红 | 推送  | 提醒   | 基金 | 港股 |
-  | ----- | ------------ | ------- | ---- | ----- | ------ | ---- | ---- |
-  | watch | announcement | explain | red  | jpush | remind | fund | hk   |`,
+| ----- | ------------ | ------- | ---- | ----- | ------ | ---- | ---- |
+| watch | announcement | explain | red  | jpush | remind | fund | hk   |`,
 };
 
 async function handler(ctx) {

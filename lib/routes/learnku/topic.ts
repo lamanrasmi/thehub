@@ -1,13 +1,12 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
-import { art } from '@/utils/render';
-import path from 'node:path';
 import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 
 export const route: Route = {
     path: '/:community/:category?',
@@ -52,7 +51,7 @@ async function handler(ctx) {
 
     const data = response.data;
     const $ = load(data);
-    const list = $('.simple-topic').get();
+    const list = $('.simple-topic').toArray();
     const item = await Promise.all(
         list.map(async (item) => {
             const $ = load(item);

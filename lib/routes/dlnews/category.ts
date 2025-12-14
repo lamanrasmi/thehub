@@ -1,14 +1,14 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import cache from '@/utils/cache';
-import { load } from 'cheerio';
-import got from '@/utils/got';
-import { getData, getList } from './utils';
-import { art } from '@/utils/render';
 import path from 'node:path';
-import asyncPool from 'tiny-async-pool';
+
+import { load } from 'cheerio';
+import pMap from 'p-map';
+
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
+import got from '@/utils/got';
+import { art } from '@/utils/render';
+
+import { getData, getList } from './utils';
 
 const _website = 'dlnews';
 const topics = {
@@ -93,10 +93,7 @@ async function handler(ctx) {
     };
     const data = await getData(`${baseUrl}${apiPath}?query=${encodeURIComponent(JSON.stringify(query))}&_website=${_website}`);
     const list = getList(data);
-    const items = [];
-    for await (const data of asyncPool(3, list, (item) => extractArticle(item))) {
-        items.push(data);
-    }
+    const items = await pMap(list, (item) => extractArticle(item), { concurrency: 3 });
 
     return {
         title: Object.hasOwn(topics, category) ? `${topics[category]} : DL News` : 'DL News',

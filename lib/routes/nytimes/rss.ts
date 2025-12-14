@@ -1,12 +1,14 @@
-import { Route, ViewType } from '@/types';
-import cache from '@/utils/cache';
-import parser from '@/utils/rss-parser';
 import { load } from 'cheerio';
+
+import type { Route } from '@/types';
+import { ViewType } from '@/types';
+import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
+import parser from '@/utils/rss-parser';
 
 export const route: Route = {
     path: '/rss/:cat?',
-    categories: ['traditional-media', 'popular'],
+    categories: ['traditional-media'],
     view: ViewType.Articles,
     example: '/nytimes/rss/HomePage',
     parameters: {
@@ -49,7 +51,11 @@ async function handler(ctx) {
 
                     const $ = load(res);
 
-                    return { ...e, description: $("[name='articleBody']").html() };
+                    return {
+                        ...e,
+                        description: $("[name='articleBody']").html(),
+                        author: $('meta[name="byl"]').attr('content'),
+                    };
                 })
             )
         ),

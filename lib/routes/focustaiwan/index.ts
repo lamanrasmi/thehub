@@ -1,14 +1,13 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
-import path from 'node:path';
+import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
 import timezone from '@/utils/timezone';
-import { parseDate } from '@/utils/parse-date';
 
 export const route: Route = {
     path: '/:category?',
@@ -27,12 +26,12 @@ export const route: Route = {
     maintainers: ['nczitzk'],
     handler,
     description: `| Latest | Editor's Picks | Photos of the Day |
-  | ------ | -------------- | ----------------- |
-  | news   | editorspicks   | photos            |
+| ------ | -------------- | ----------------- |
+| news   | editorspicks   | photos            |
 
-  | Politics | Cross-strait | Business | Society | Science & Tech | Culture | Sports |
-  | -------- | ------------ | -------- | ------- | -------------- | ------- | ------ |
-  | politics | cross-strait | business | society | science & tech | culture | sports |`,
+| Politics | Cross-strait | Business | Society | Science & Tech | Culture | Sports |
+| -------- | ------------ | -------- | ------- | -------------- | ------- | ------ |
+| politics | cross-strait | business | society | science & tech | culture | sports |`,
 };
 
 async function handler(ctx) {

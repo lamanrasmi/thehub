@@ -1,14 +1,13 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
+
 const domain = 'manhua.fffdm.com';
 const host = `https://${domain}`;
-import { art } from '@/utils/render';
-import path from 'node:path';
-import { parseDate } from '@/utils/parse-date';
 
 const get_pic = async (url) => {
     const response = await got(url);
@@ -49,7 +48,7 @@ async function handler(ctx) {
     const id = ctx.req.param('id');
     const count = ctx.req.query('limit') || 99999;
     const cdnNum = ctx.req.param('cdn') || 5;
-    const cdn = !isNaN(Number.parseInt(cdnNum)) && 1 <= Number.parseInt(cdnNum) && Number.parseInt(cdnNum) <= 5 ? `https://p${cdnNum}.fzacg.com` : `https://p5.fzacg.com`;
+    const cdn = !Number.isNaN(Number.parseInt(cdnNum)) && 1 <= Number.parseInt(cdnNum) && Number.parseInt(cdnNum) <= 5 ? `https://p${cdnNum}.fzacg.com` : `https://p5.fzacg.com`;
 
     // 获取漫画清单
     const response = await got(`${host}/api/manhua/${id}`);

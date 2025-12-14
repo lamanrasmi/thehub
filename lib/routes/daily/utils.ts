@@ -1,12 +1,11 @@
-import { parseDate } from '@/utils/parse-date';
-import ofetch from '@/utils/ofetch';
-import cache from '@/utils/cache';
-import { config } from '@/config';
-import { art } from '@/utils/render';
 import path from 'node:path';
-import { getCurrentPath } from '@/utils/helpers';
-import { DataItem } from '@/types';
-const __dirname = getCurrentPath(import.meta.url);
+
+import { config } from '@/config';
+import type { DataItem } from '@/types';
+import cache from '@/utils/cache';
+import ofetch from '@/utils/ofetch';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 
 export const baseUrl = 'https://app.daily.dev';
 const gqlUrl = `https://api.daily.dev/graphql`;

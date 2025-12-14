@@ -1,14 +1,13 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 export const handler = async (ctx) => {
     const { category = 'zx' } = ctx.req.param();
@@ -108,9 +107,9 @@ export const route: Route = {
     example: '/005/zx',
     parameters: { category: '分类，可在对应分类页 URL 中找到，默认为二次元资讯' },
     description: `
-  | 二次元资讯 | 慢慢说 | 道听途说 | 展会资讯 |
-  | ---------- | ------ | -------- | -------- |
-  | zx         | zwh    | dtts     | zh       |
+| 二次元资讯 | 慢慢说 | 道听途说 | 展会资讯 |
+| ---------- | ------ | -------- | -------- |
+| zx         | zwh    | dtts     | zh       |
     `,
     categories: ['anime'],
 

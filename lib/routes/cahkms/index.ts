@@ -1,13 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 const titles = {
     '01': '关于我们',
@@ -46,12 +44,12 @@ export const route: Route = {
     handler,
     url: 'cahkms.org/',
     description: `| 关于我们 | 港澳新闻 | 重要新闻 | 顾问点评、会员观点 | 专题汇总 |
-  | -------- | -------- | -------- | ------------------ | -------- |
-  | 01       | 02       | 03       | 04                 | 05       |
+| -------- | -------- | -------- | ------------------ | -------- |
+| 01       | 02       | 03       | 04                 | 05       |
 
-  | 港澳时评 | 图片新闻 | 视频中心 | 港澳研究 | 最新书讯 | 研究资讯 |
-  | -------- | -------- | -------- | -------- | -------- | -------- |
-  | 06       | 07       | 08       | 09       | 10       | 11       |`,
+| 港澳时评 | 图片新闻 | 视频中心 | 港澳研究 | 最新书讯 | 研究资讯 |
+| -------- | -------- | -------- | -------- | -------- | -------- |
+| 06       | 07       | 08       | 09       | 10       | 11       |`,
 };
 
 async function handler(ctx) {

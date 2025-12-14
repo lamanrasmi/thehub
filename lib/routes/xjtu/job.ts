@@ -1,13 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
-import timezone from '@/utils/timezone';
-import path from 'node:path';
 import { art } from '@/utils/render';
+import timezone from '@/utils/timezone';
 
 const baseUrl = 'https://job.xjtu.edu.cn';
 const arr = {
@@ -37,9 +35,9 @@ export const route: Route = {
     handler,
     description: `栏目类型
 
-  | 中心公告 | 选调生 | 重点单位 | 国际组织 | 创新创业 | 就业实习 |
-  | -------- | ------ | -------- | -------- | -------- | -------- |
-  | zxgg     | xds    | zddw     | gjzz     | cxcy     | jysx     |`,
+| 中心公告 | 选调生 | 重点单位 | 国际组织 | 创新创业 | 就业实习 |
+| -------- | ------ | -------- | -------- | -------- | -------- |
+| zxgg     | xds    | zddw     | gjzz     | cxcy     | jysx     |`,
 };
 
 async function handler(ctx) {

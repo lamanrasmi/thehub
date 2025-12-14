@@ -1,14 +1,12 @@
-import { Route } from '@/types';
+import path from 'node:path';
 
+import { config } from '@/config';
+import type { Route } from '@/types';
 import ofetch from '@/utils/ofetch';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { Media, PostResponse } from './types';
-import { config } from '@/config';
 
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import type { Media, PostResponse } from './types';
 
 export const route: Route = {
     path: '/post/list/:sort?',
@@ -31,7 +29,7 @@ export const route: Route = {
 
 const baseUrl = 'https://web.bc3ts.net';
 
-const renderMedia = (media: Media[]) => art(path.join(__dirname, 'templates', 'media.art'), { media });
+const renderMedia = (media: Media[]) => art(path.join(__dirname, 'templates/media.art'), { media });
 
 async function handler(ctx) {
     const { sort = '1' } = ctx.req.param();

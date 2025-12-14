@@ -1,15 +1,16 @@
-import { Route } from '@/types';
+import path from 'node:path';
+
+import * as cheerio from 'cheerio';
+
+import { config } from '@/config';
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
-import * as cheerio from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { getCurrentPath } from '@/utils/helpers';
-import { config } from '@/config';
-import { ArticleDetail, Category, CategoryArticle } from './types';
 
-const __dirname = getCurrentPath(import.meta.url);
+import type { ArticleDetail, Category, CategoryArticle } from './types';
+
 const baseUrl = 'https://www.famitsu.com';
 
 export const route: Route = {
@@ -26,8 +27,8 @@ export const route: Route = {
     maintainers: ['TonyRL'],
     handler,
     description: `| 新着        | Switch | PS5 | PS4 | PC ゲーム | ニュース | 動画   | 特集・企画記事  | インタビュー | 取材・リポート | レビュー | インディーゲーム |
-  | ----------- | ------ | --- | --- | --------- | -------- | ------ | --------------- | ------------ | -------------- | -------- | ---------------- |
-  | new-article | switch | ps5 | ps4 | pc-game   | news     | videos | special-article | interview    | event-report   | review   | indie-game       |`,
+| ----------- | ------ | --- | --- | --------- | -------- | ------ | --------------- | ------------ | -------------- | -------- | ---------------- |
+| new-article | switch | ps5 | ps4 | pc-game   | news     | videos | special-article | interview    | event-report   | review   | indie-game       |`,
 };
 
 function getBuildId() {
@@ -45,7 +46,7 @@ function getBuildId() {
 }
 
 function render(data) {
-    return art(path.join(__dirname, 'templates', 'description.art'), data);
+    return art(path.join(__dirname, 'templates/description.art'), data);
 }
 
 function renderJSON(c) {

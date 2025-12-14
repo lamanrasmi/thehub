@@ -1,12 +1,11 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
+
+import { load } from 'cheerio';
 
 import cache from '@/utils/cache';
-import { load } from 'cheerio';
-import { parseDate } from '@/utils/parse-date';
-import got from '@/utils/got';
+import ofetch from '@/utils/ofetch';
+import { parseDate, parseRelativeDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const defaultRssItem = (item) => ({
     title: item.name,
@@ -27,10 +26,12 @@ export default {
             // external link
             return defaultRssItem(item);
         }
-        const itemUrl = `https://m.thepaper.cn/detail/${item.contId}`;
+        const itemUrl = `https://m.thepaper.cn/${item.cornerLabelDesc && item.cornerLabelDesc === '短剧' ? 'series' : 'detail'}/${item.contId}`;
         return cache.tryGet(`${itemUrl}${useOldMode ? ':old' : ''}`, async () => {
-            const res = await got(itemUrl);
-            const data = JSON.parse(load(res.data)('#__NEXT_DATA__').html());
+            const res = await ofetch(itemUrl);
+            const $ = load(res);
+            const nextData = $('#__NEXT_DATA__').text();
+            const data = JSON.parse(nextData);
             const detailData = data.props.pageProps.detailData;
             const contentDetail = detailData.contentDetail || detailData.liveDetail || detailData.specialDetail?.specialInfo;
             if (!contentDetail) {
@@ -58,12 +59,17 @@ export default {
                 }
             }
 
+            let pubDate = parseDate(item.pubTimeLong || contentDetail.publishTime);
+            if (Number.isNaN(pubDate)) {
+                pubDate = parseRelativeDate(contentDetail.pubTime);
+            }
+
             const rss_item = {
                 title: contentDetail.name || contentDetail.shareName,
                 link: itemUrl,
                 description,
                 category: [...(contentDetail.tagList?.map((t) => t.tag) ?? []), contentDetail?.nodeInfo?.name ?? []],
-                pubDate: parseDate(item.pubTimeLong || contentDetail.pubTime || contentDetail.publishTime),
+                pubDate,
                 author: contentDetail.author || '',
                 media: {
                     content: {
@@ -84,5 +90,5 @@ export default {
     },
     ChannelIdToName: (nodeId, next_data) => next_data.props.appProps.menu.channelList.find((c) => c.nodeId.toString() === nodeId.toString()).name,
     ListIdToName: (listId, next_data) => next_data.props.appProps.menu.channelList.flatMap((c) => c.childNodeList || []).find((l) => l.nodeId.toString() === listId.toString())?.name,
-    ExtractLogo: (response) => 'https://m.thepaper.cn' + load(response.data)('img.imageCover').attr('src'),
+    ExtractLogo: (response) => 'https://m.thepaper.cn' + load(response)('img.imageCover').attr('src'),
 };

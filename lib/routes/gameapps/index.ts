@@ -1,14 +1,13 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
-import parser from '@/utils/rss-parser';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import parser from '@/utils/rss-parser';
 
 export const route: Route = {
     path: '/',
@@ -59,7 +58,7 @@ async function handler() {
                 if (nextPages.length) {
                     const pages = await Promise.all(
                         nextPages.map(async (url) => {
-                            const { data: response } = await got(url, {
+                            const response = await ofetch(url, {
                                 headers: {
                                     referer: item.link,
                                 },
@@ -76,7 +75,7 @@ async function handler() {
                     intro: $('div.introduction.media.news-intro div.media-body').html()?.trim(),
                     desc: content.html()?.trim(),
                 });
-                item.guid = item.guid.substring(0, item.link.lastIndexOf('/'));
+                item.guid = item.guid.slice(0, item.link.lastIndexOf('/'));
                 item.pubDate = parseDate(item.pubDate);
                 item.enclosure_url = $('div.introduction.media.news-intro div.media-left').find('img').attr('src');
                 item.enclosure_type = 'image/jpeg';

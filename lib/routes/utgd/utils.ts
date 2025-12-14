@@ -1,13 +1,13 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
+
+import MarkdownIt from 'markdown-it';
 
 import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import MarkdownIt from 'markdown-it';
+import timezone from '@/utils/timezone';
+
 const md = MarkdownIt({
     html: true,
 });
@@ -32,7 +32,7 @@ export const parseArticle = (item) =>
         item.description = art(path.join(__dirname, 'templates/description.art'), {
             membership: data.article_for_membership,
             image: data.article_image,
-            description: md.render(data.article_description),
+            description: md.render(data.article_content),
         });
 
         item.category = [...data.article_category.map((c) => c.category_name), ...data.article_tag.map((t) => t.tag_name)];

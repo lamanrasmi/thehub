@@ -1,19 +1,18 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const baseUrl = 'https://news.google.com';
 
 export const route: Route = {
     path: '/news/:category/:locale',
-    categories: ['new-media', 'popular'],
+    categories: ['new-media'],
     example: '/google/news/Top stories/hl=en-US&gl=US&ceid=US:en',
     parameters: { category: 'Category Title', locale: 'locales, could be found behind `?`, including `hl`, `gl`, and `ceid` as parameters' },
     features: {

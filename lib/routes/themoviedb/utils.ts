@@ -1,9 +1,7 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
 import path from 'node:path';
-import { art } from '@/utils/render';
+
 import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 
 const handleDescription = (item) => {
     const poster_path = item.poster_path ?? item.still_path;

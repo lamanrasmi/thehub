@@ -1,15 +1,14 @@
 import path from 'node:path';
 
-import { type Context } from 'hono';
-import { load, type CheerioAPI } from 'cheerio';
+import type { CheerioAPI } from 'cheerio';
+import { load } from 'cheerio';
+import type { Context } from 'hono';
 
-import { type DataItem, type Route, type Data, ViewType } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
+import type { Data, DataItem, Route } from '@/types';
+import { ViewType } from '@/types';
+import ofetch from '@/utils/ofetch';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import ofetch from '@/utils/ofetch';
-
-const __dirname = getCurrentPath(import.meta.url);
 
 export const handler = async (ctx: Context): Promise<Data> => {
     const { state = 'all' } = ctx.req.param();
@@ -99,7 +98,7 @@ If you subscribe to [Recent petitions](https://petition.parliament.uk/petitions?
 :::
 
 <details>
-  <summary>More states</summary>
+<summary>More states</summary>
 
 | Name                            | ID                |
 | ------------------------------- | ----------------- |

@@ -1,11 +1,10 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
-import { getData } from './utils';
+import type { Route } from '@/types';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+
+import { getData } from './utils';
 
 export const route: Route = {
     path: '/news/coronavirus/total',

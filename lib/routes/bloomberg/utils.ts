@@ -1,15 +1,12 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import cache from '@/utils/cache';
-import { load } from 'cheerio';
 import path from 'node:path';
-import asyncPool from 'tiny-async-pool';
+
+import { load } from 'cheerio';
 import { destr } from 'destr';
 
-import { parseDate } from '@/utils/parse-date';
+import cache from '@/utils/cache';
 import got from '@/utils/got';
 import ofetch from '@/utils/ofetch';
+import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
 
 const rootUrl = 'https://www.bloomberg.com/feeds';
@@ -201,10 +198,10 @@ const parseVideoPage = async (res, api, item) => {
 
 const parsePhotoEssaysPage = async (res, api, item) => {
     const $ = load(res.data.html);
-    const article_json = $(api.sel)
-        .toArray()
-        .map((e) => JSON.parse($(e).html()))
-        .reduce((pv, cv) => ({ ...pv, ...cv }), {});
+    const article_json = {};
+    for (const e of $(api.sel).toArray()) {
+        Object.assign(article_json, JSON.parse($(e).html()));
+    }
     const rss_item = {
         title: article_json.headline || item.title,
         link: article_json.canonical || item.link,
@@ -607,12 +604,4 @@ const documentToHtmlString = async (document) => {
     return str;
 };
 
-const asyncPoolAll = async (...args) => {
-    const results = [];
-    for await (const result of asyncPool(...args)) {
-        results.push(result);
-    }
-    return results;
-};
-
-export { rootUrl, asyncPoolAll, parseNewsList, parseArticle };
+export { parseArticle, parseNewsList, rootUrl };

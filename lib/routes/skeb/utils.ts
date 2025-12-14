@@ -1,12 +1,10 @@
+import path from 'node:path';
+
 import { config } from '@/config';
-import { DataItem } from '@/types';
+import type { DataItem } from '@/types';
 import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { getCurrentPath } from '@/utils/helpers';
-
-const __dirname = getCurrentPath(import.meta.url);
 
 export const baseUrl = 'https://skeb.jp';
 

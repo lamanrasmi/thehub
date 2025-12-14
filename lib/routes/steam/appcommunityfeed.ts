@@ -1,10 +1,8 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import ofetch from '@/utils/ofetch';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const workshopFileTypes = {
     0: 'Community',

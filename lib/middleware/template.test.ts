@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
-import app from '@/app';
 import Parser from 'rss-parser';
+import { describe, expect, it } from 'vitest';
+
+import app from '@/app';
 
 const parser = new Parser();
 
@@ -113,5 +114,13 @@ describe('template', () => {
         const response = await app.request('/test/redirect');
         expect(response.status).toBe(301);
         expect(response.headers.get('location')).toBe('/test/1');
+    });
+
+    it(`api`, async () => {
+        const response = await app.request('/api/test');
+        expect(response.status).toBe(200);
+        expect(await response.json()).toEqual({
+            code: 0,
+        });
     });
 });

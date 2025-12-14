@@ -1,15 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import cache from '@/utils/cache';
-import got from '@/utils/got';
-import { load } from 'cheerio';
 import path from 'node:path';
-import { art } from '@/utils/render';
 
-import { CookieJar } from 'tough-cookie';
-const cookieJar = new CookieJar();
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
+import ofetch from '@/utils/ofetch';
+import { art } from '@/utils/render';
 
 export const route: Route = {
     path: '/journal/:journal',
@@ -39,39 +35,63 @@ async function handler(ctx) {
     const journal = ctx.req.param('journal');
     const jrnlUrl = `${host}/journal/${journal}/volumes-and-issues`;
 
-    const response = await got(jrnlUrl, {
-        cookieJar,
+    const authorizeResponse = await ofetch.raw('https://idp.springer.com/authorize', {
+        query: {
+            response_type: 'cookie',
+            client_id: 'springerlink',
+            redirect_uri: jrnlUrl,
+        },
+        redirect: 'manual',
     });
-    const $ = load(response.data);
+    const authorizeCookie = authorizeResponse.headers
+        .getSetCookie()
+        .map((c) => c.split(';')[0])
+        .join('; ');
+
+    await ofetch(authorizeResponse.headers.get('location'), {
+        headers: {
+            cookie: authorizeCookie,
+        },
+        redirect: 'manual',
+    });
+
+    const response = await ofetch(jrnlUrl, {
+        headers: {
+            cookie: authorizeCookie,
+        },
+    });
+    const $ = load(response);
     const jrnlName = $('span.app-journal-masthead__title').text().trim();
     const issueUrl = `${host}${$('li.c-list-group__item:first-of-type').find('a').attr('href')}`;
 
-    const response2 = await got(issueUrl, {
-        cookieJar,
+    const response2 = await ofetch(issueUrl, {
+        headers: {
+            cookie: authorizeCookie,
+        },
     });
-    const $2 = load(response2.data);
+    const $2 = load(response2);
     const issue = $2('h2.app-journal-latest-issue__heading').text();
     const list = $2('ol.u-list-reset > li')
-        .map((_, item) => {
+        .toArray()
+        .map((item) => {
             const title = $(item).find('h3.app-card-open__heading').find('a').text().trim();
             const link = $(item).find('h3.app-card-open__heading').find('a').attr('href');
             const doi = link.replace('https://link.springer.com/article/', '');
             const img = $(item).find('img').attr('src');
             const authors = $(item)
                 .find('li')
-                .map((_, item) => $(item).text().trim())
-                .get()
+                .toArray()
+                .map((item) => $(item).text().trim())
                 .join('; ');
             return {
                 title,
-                link,
+                link: link.startsWith('http') ? link : `${host}${link}`,
                 doi,
                 issue,
                 img,
                 authors,
             };
-        })
-        .get();
+        });
 
     const renderDesc = (item) =>
         art(path.join(__dirname, 'templates/description.art'), {
@@ -80,10 +100,12 @@ async function handler(ctx) {
     const items = await Promise.all(
         list.map((item) =>
             cache.tryGet(item.link, async () => {
-                const response3 = await got(item.link, {
-                    cookieJar,
+                const response3 = await ofetch(item.link, {
+                    headers: {
+                        cookie: authorizeCookie,
+                    },
                 });
-                const $3 = load(response3.data);
+                const $3 = load(response3);
                 item.abstract = $3('div#Abs1-content > p:first-of-type').text();
                 item.description = renderDesc(item);
                 return item;

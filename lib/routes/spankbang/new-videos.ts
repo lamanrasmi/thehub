@@ -1,15 +1,14 @@
-import { Data, Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-
-import puppeteer from '@/utils/puppeteer';
-import * as cheerio from 'cheerio';
-import { art } from '@/utils/render';
 import path from 'node:path';
-import { config } from '@/config';
-import logger from '@/utils/logger';
-import cache from '@/utils/cache';
 
-const __dirname = getCurrentPath(import.meta.url);
+import * as cheerio from 'cheerio';
+
+import { config } from '@/config';
+import type { Data, Route } from '@/types';
+import cache from '@/utils/cache';
+import logger from '@/utils/logger';
+import puppeteer from '@/utils/puppeteer';
+import { art } from '@/utils/render';
+
 const render = (data) => art(path.join(__dirname, 'templates/video.art'), data);
 
 const handler = async () => {
@@ -61,7 +60,7 @@ const handler = async () => {
         false
     );
 
-    browser.close();
+    await browser.close();
 
     return {
         title: data.title,
@@ -80,6 +79,7 @@ export const route: Route = {
     features: {
         antiCrawler: true,
         requirePuppeteer: true,
+        nsfw: true,
     },
     radar: [
         {

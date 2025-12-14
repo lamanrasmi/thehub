@@ -1,17 +1,16 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 export const route: Route = {
     path: '/daily_briefing_chinese',
-    categories: ['traditional-media', 'popular'],
+    categories: ['traditional-media'],
     example: '/nytimes/daily_briefing_chinese',
     parameters: {},
     features: {

@@ -1,17 +1,17 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import MarkdownIt from 'markdown-it';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import MarkdownIt from 'markdown-it';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
+
 const md = MarkdownIt({
     html: true,
     linkify: true,
 });
-import path from 'node:path';
-import { art } from '@/utils/render';
-import { parseDate } from '@/utils/parse-date';
 
 export const route: Route = {
     path: '/datasets',

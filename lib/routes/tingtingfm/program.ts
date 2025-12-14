@@ -1,18 +1,18 @@
-import { Route, ViewType } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { config } from '@/config';
+import type { Route } from '@/types';
+import { ViewType } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { config } from '@/config';
-import { art } from '@/utils/render';
-import path from 'node:path';
 import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
+
 import { getClientVal, sign } from './utils';
 
 export const route: Route = {
     path: '/program/:programId',
-    categories: ['multimedia', 'popular'],
+    categories: ['multimedia'],
     view: ViewType.Audios,
     example: '/tingtingfm/program/M7VJv6Jj4R',
     parameters: { programId: '节目 ID，可以在 URL 中找到' },

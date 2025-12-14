@@ -1,10 +1,8 @@
-import { Route } from '@/types';
-import got from '@/utils/got';
-import { getCurrentPath } from '@/utils/helpers';
-import { art } from '@/utils/render';
 import path from 'node:path';
 
-const __dirname = getCurrentPath(import.meta.url);
+import type { Route } from '@/types';
+import got from '@/utils/got';
+import { art } from '@/utils/render';
 
 export const route: Route = {
     path: '/movie/coming',

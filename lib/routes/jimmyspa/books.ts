@@ -1,13 +1,14 @@
-import { Route, ViewType } from '@/types';
-import { parseDate } from '@/utils/parse-date';
-import got from '@/utils/got';
-import { load } from 'cheerio';
-import { art } from '@/utils/render';
-import { getCurrentPath } from '@/utils/helpers';
-import cache from '@/utils/cache';
 import path from 'node:path';
 
-const __dirname = getCurrentPath(import.meta.url);
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
+import { ViewType } from '@/types';
+import cache from '@/utils/cache';
+import got from '@/utils/got';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
+
 export const route: Route = {
     path: '/books/:language',
     categories: ['design'],
@@ -36,7 +37,7 @@ export const route: Route = {
 | en | English |
 | jp | 日本語 |
     `,
-    maintainers: ['FYLSen'],
+    maintainers: ['Cedaric'],
     handler,
 };
 

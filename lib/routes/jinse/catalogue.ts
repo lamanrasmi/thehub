@@ -1,13 +1,12 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const categories = {
     zhengce: '政策',
@@ -39,12 +38,12 @@ export const route: Route = {
     maintainers: ['nczitzk'],
     handler,
     description: `| 政策    | 行情         | DeFi | 矿业  | 以太坊 2.0 |
-  | ------- | ------------ | ---- | ----- | ---------- |
-  | zhengce | fenxishishuo | defi | kuang | 以太坊 2.0 |
+| ------- | ------------ | ---- | ----- | ---------- |
+| zhengce | fenxishishuo | defi | kuang | 以太坊 2.0 |
 
-  | 产业     | IPFS | 技术 | 百科  | 研报          |
-  | -------- | ---- | ---- | ----- | ------------- |
-  | industry | IPFS | tech | baike | capitalmarket |`,
+| 产业     | IPFS | 技术 | 百科  | 研报          |
+| -------- | ---- | ---- | ----- | ------------- |
+| industry | IPFS | tech | baike | capitalmarket |`,
 };
 
 async function handler(ctx) {

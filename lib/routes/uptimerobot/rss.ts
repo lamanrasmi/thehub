@@ -1,13 +1,12 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import Parser from 'rss-parser';
-import { art } from '@/utils/render';
 import path from 'node:path';
+
 import dayjs from 'dayjs';
-import { fallback, queryToBoolean } from '@/utils/readable-social';
+import Parser from 'rss-parser';
+
 import InvalidParameterError from '@/errors/types/invalid-parameter';
+import type { Route } from '@/types';
+import { fallback, queryToBoolean } from '@/utils/readable-social';
+import { art } from '@/utils/render';
 
 const titleRegex = /(.+)\s+is\s+([A-Z]+)\s+\((.+)\)/;
 
@@ -81,8 +80,8 @@ export const route: Route = {
     maintainers: ['Rongronggg9'],
     handler,
     description: `| Key    | Description                                                              | Accepts        | Defaults to |
-  | ------ | ------------------------------------------------------------------------ | -------------- | ----------- |
-  | showID | Show monitor ID (disabling it will also disable link for each RSS entry) | 0/1/true/false | true        |`,
+| ------ | ------------------------------------------------------------------------ | -------------- | ----------- |
+| showID | Show monitor ID (disabling it will also disable link for each RSS entry) | 0/1/true/false | true        |`,
 };
 
 async function handler(ctx) {
@@ -99,7 +98,7 @@ async function handler(ctx) {
 
     const monitors = {};
 
-    const items = rss.items.reverse().map((item) => {
+    const items = rss.items.toReversed().map((item) => {
         const titleMatch = item.title.match(titleRegex);
         if (!titleMatch) {
             throw new InvalidParameterError('Unexpected title, please open an issue.');

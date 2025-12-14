@@ -1,14 +1,13 @@
-import type { Data, DataItem, Route } from '@/types';
-import type { Context } from 'hono';
-import { load } from 'cheerio';
-import puppeteer from '@/utils/puppeteer';
-import logger from '@/utils/logger';
-import { art } from '@/utils/render';
 import path from 'node:path';
-import { parseDate } from '@/utils/parse-date';
-import { getCurrentPath } from '@/utils/helpers';
 
-const __dirname = getCurrentPath(import.meta.url);
+import { load } from 'cheerio';
+import type { Context } from 'hono';
+
+import type { Data, DataItem, Route } from '@/types';
+import logger from '@/utils/logger';
+import { parseDate } from '@/utils/parse-date';
+import puppeteer from '@/utils/puppeteer';
+import { art } from '@/utils/render';
 
 export const route: Route = {
     name: '漏洞',
@@ -29,8 +28,8 @@ export const route: Route = {
     },
     handler,
     description: `| 缺省   | all  | closed | disclosed | patching |
-  | ------ | ---- | ------ | --------- | -------- |
-  | 活動中 | 全部 | 關閉   | 公開      | 修補中   |`,
+| ------ | ---- | ------ | --------- | -------- |
+| 活動中 | 全部 | 關閉   | 公開      | 修補中   |`,
 };
 
 const baseUrl = 'https://zeroday.hitcon.org/vulnerability';
@@ -63,7 +62,7 @@ async function handler(ctx: Context): Promise<Data> {
     });
 
     const response = await page.evaluate(() => document.documentElement.innerHTML);
-    browser.close();
+    await browser.close();
 
     const $ = load(response);
     const items: DataItem[] = $('.zdui-strip-list>li')

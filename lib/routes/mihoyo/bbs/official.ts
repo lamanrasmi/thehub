@@ -1,12 +1,11 @@
-import { Route } from '@/types';
+import path from 'node:path';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { art } from '@/utils/render';
-import path from 'node:path';
-import { parseDate } from '@/utils/parse-date';
-import { getCurrentPath } from '@/utils/helpers';
 import logger from '@/utils/logger';
-const __dirname = getCurrentPath(import.meta.url);
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 
 // 游戏id
 const GITS_MAP = {
@@ -139,15 +138,15 @@ export const route: Route = {
     handler,
     description: `游戏 id
 
-  | 崩坏三 | 原神 | 崩坏二 | 未定事件簿 | 星穹铁道 | 绝区零 |
-  | ------ | ---- | ------ | ---------- | -------- | ------ |
-  | 1      | 2    | 3      | 4          | 6        | 8      |
+| 崩坏三 | 原神 | 崩坏二 | 未定事件簿 | 星穹铁道 | 绝区零 |
+| ------ | ---- | ------ | ---------- | -------- | ------ |
+| 1      | 2    | 3      | 4          | 6        | 8      |
 
   公告类型
 
-  | 公告 | 活动 | 资讯 |
-  | ---- | ---- | ---- |
-  | 1    | 2    | 3    |`,
+| 公告 | 活动 | 资讯 |
+| ---- | ---- | ---- |
+| 1    | 2    | 3    |`,
 };
 
 async function handler(ctx) {

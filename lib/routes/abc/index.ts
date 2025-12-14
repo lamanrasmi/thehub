@@ -1,13 +1,12 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import ofetch from '@/utils/ofetch';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 export const route: Route = {
     path: '/:category{.+}?',
@@ -45,7 +44,7 @@ async function handler(ctx) {
     let currentUrl = '';
     let documentId;
 
-    if (isNaN(category)) {
+    if (Number.isNaN(category)) {
         currentUrl = new URL(category, rootUrl).href;
     } else {
         documentId = category;
@@ -134,7 +133,7 @@ async function handler(ctx) {
                     if (enclosureMatches) {
                         const enclosureMatch = enclosureMatches
                             .map((e) => e.match(new RegExp(enclosurePattern)))
-                            .sort((a, b) => Number.parseInt(a[2], 10) - Number.parseInt(b[2], 10))
+                            .toSorted((a, b) => Number.parseInt(a[2], 10) - Number.parseInt(b[2], 10))
                             .pop();
 
                         item.enclosure_url = enclosureMatch[3];

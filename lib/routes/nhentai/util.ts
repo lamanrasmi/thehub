@@ -1,14 +1,13 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
 import { load } from 'cheerio';
+
+import { config } from '@/config';
+import ConfigNotFoundError from '@/errors/types/config-not-found';
 import got from '@/utils/got';
 import ofetch from '@/utils/ofetch';
-import { config } from '@/config';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import ConfigNotFoundError from '@/errors/types/config-not-found';
 
 const baseUrl = 'https://nhentai.net';
 
@@ -103,7 +102,10 @@ const parseSimpleDetail = ($ele) => {
     const link = new URL($ele.attr('href'), baseUrl).href;
     const thumb = $ele.children('img');
     const thumbSrc = thumb.attr('data-src') || thumb.attr('src');
-    const highResoThumbSrc = thumbSrc.replace('thumb', '1').replace(/t(\d+)\.nhentai\.net/, 'i$1.nhentai.net');
+    const highResoThumbSrc = thumbSrc
+        .replace('thumb', '1')
+        .replace(/t(\d+)\.nhentai\.net/, 'i$1.nhentai.net')
+        .replace('.webp.webp', '.webp');
     return {
         title: $ele.children('.caption').text(),
         link,
@@ -130,7 +132,9 @@ const getDetail = async (simple) => {
         .toArray()
         .map((ele) => new URL($(ele).attr('data-src'), baseUrl).href)
         .map((src) => src.replace(/(.+)(\d+)t\.(.+)/, (_, p1, p2, p3) => `${p1}${p2}.${p3}`)) // thumb to high-quality
-        .map((src) => src.replace(/t(\d+)\.nhentai\.net/, 'i$1.nhentai.net'));
+        .map((src) => src.replace(/t(\d+)\.nhentai\.net/, 'i$1.nhentai.net'))
+        .map((src) => src.replace(/\.(jpg|png|gif)\.webp$/, '.$1')) // 移除重複的.webp後綴
+        .map((src) => src.replace(/\.webp\.webp$/, '.webp')); // 處理.webp.webp的情況
 
     return {
         ...simple,
@@ -143,4 +147,4 @@ const getDetail = async (simple) => {
     };
 };
 
-export { baseUrl, getSimple, getDetails, getTorrents };
+export { baseUrl, getDetails, getSimple, getTorrents };

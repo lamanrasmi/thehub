@@ -1,4 +1,4 @@
-import { describe, expect, it, afterAll } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
 
 process.env.NODE_NAME = 'mock';
 process.env.ALLOW_ORIGIN = 'rsshub.mock';
@@ -23,6 +23,7 @@ describe('header', () => {
         expect(response.headers.get('rsshub-node')).toBe('mock');
         expect(response.headers.get('etag')).not.toBe(undefined);
         etag = response.headers.get('etag');
+        expect(response.headers.get('x-rsshub-route')).toBe('/test/:id/:params?');
     });
 
     it(`etag`, async () => {

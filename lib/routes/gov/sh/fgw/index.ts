@@ -1,14 +1,13 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 export const handler = async (ctx) => {
     const { category = 'fgw_zxxxgk' } = ctx.req.param();
@@ -117,9 +116,9 @@ export const route: Route = {
   若订阅 [最新信息公开](https://fgw.sh.gov.cn/fgw_zxxxgk/index.html)，网址为 \`https://fgw.sh.gov.cn/fgw_zxxxgk/index.html\`。截取 \`https://fgw.sh.gov.cn/\` 到末尾 \`/index.html\` 的部分 \`fgw_zxxxgk\` 作为参数填入，此时路由为 [\`/gov/sh/fgw/fgw_zxxxgk\`](https://rsshub.app/gov/sh/fgw/fgw_zxxxgk)。
 :::
 
-  | 最新信息公开 | 要闻动态   |
-  | ------------ | ---------- |
-  | fgw_zxxxgk   | fgw_fzggdt |
+| 最新信息公开 | 要闻动态   |
+| ------------ | ---------- |
+| fgw_zxxxgk   | fgw_fzggdt |
   `,
     categories: ['government'],
 

@@ -1,18 +1,16 @@
-import { DataItem, Route } from '@/types';
+import path from 'node:path';
+
+import * as cheerio from 'cheerio';
 import type { Context } from 'hono';
 
-import ofetch from '@/utils/ofetch';
+import type { DataItem, Route } from '@/types';
 import cache from '@/utils/cache';
-import * as cheerio from 'cheerio';
-import timezone from '@/utils/timezone';
+import ofetch from '@/utils/ofetch';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { getCurrentPath } from '@/utils/helpers';
+import timezone from '@/utils/timezone';
 
-const __dirname = getCurrentPath(import.meta.url);
-
-const render = (data) => art(path.join(__dirname, 'templates', 'series.art'), data);
+const render = (data) => art(path.join(__dirname, 'templates/series.art'), data);
 
 export const route: Route = {
     path: '/series/:name',

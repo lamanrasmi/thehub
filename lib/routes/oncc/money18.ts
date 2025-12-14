@@ -1,15 +1,14 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
-import cache from '@/utils/cache';
-import got from '@/utils/got';
 import { load } from 'cheerio';
 import dayjs from 'dayjs';
-import timezone from '@/utils/timezone';
+
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
+import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 const sections = {
     exp: '新聞總覽',
@@ -41,8 +40,8 @@ export const route: Route = {
     maintainers: ['nczitzk'],
     handler,
     description: `| 新聞總覽 | 全日焦點 | 板塊新聞 | 國際金融 | 大行報告 | A 股新聞 | 地產新聞 | 投資理財  | 新股 IPO | 科技財情 |
-  | -------- | -------- | -------- | -------- | -------- | -------- | -------- | --------- | -------- | -------- |
-  | exp      | fov      | industry | int      | recagent | ntlgroup | pro      | weainvest | ipo      | tech     |`,
+| -------- | -------- | -------- | -------- | -------- | -------- | -------- | --------- | -------- | -------- |
+| exp      | fov      | industry | int      | recagent | ntlgroup | pro      | weainvest | ipo      | tech     |`,
 };
 
 async function handler(ctx) {

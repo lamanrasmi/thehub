@@ -1,12 +1,11 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
+
+import { load } from 'cheerio';
 
 import cache from '@/utils/cache';
-import { load } from 'cheerio';
 import got from '@/utils/got';
-import { art } from '@/utils/render';
-import path from 'node:path';
 import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
 
 const parseBookInList = (element) => {
     const $ = load(element);
@@ -31,7 +30,7 @@ const parseBookInList = (element) => {
 
 const parsePubDate = (data) => {
     const dateString = data('script')
-        .get()
+        .toArray()
         .find((element) => {
             const fullString = element.children[0];
             if (!fullString || !fullString.data) {

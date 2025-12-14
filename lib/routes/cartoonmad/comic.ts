@@ -1,13 +1,12 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import cache from '@/utils/cache';
-import { load } from 'cheerio';
-import got from '@/utils/got';
-import iconv from 'iconv-lite';
-import { art } from '@/utils/render';
 import path from 'node:path';
+
+import { load } from 'cheerio';
+import iconv from 'iconv-lite';
+
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
+import got from '@/utils/got';
+import { art } from '@/utils/render';
 
 const baseUrl = 'https://www.cartoonmad.com';
 const KEY = '5e585';
@@ -85,7 +84,7 @@ async function handler(ctx) {
                 pages: item.next('font').text().match(/\d+/)[0],
             };
         })
-        .reverse();
+        .toReversed();
 
     const chapters = await getChapters(id, list, cache.tryGet);
 

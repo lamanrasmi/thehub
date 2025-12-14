@@ -1,12 +1,11 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
+
+import { load } from 'cheerio';
 
 import got from '@/utils/got';
-import { load } from 'cheerio';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 const domain = 'whu.edu.cn';
 
@@ -140,4 +139,4 @@ const processItems = async (items, tryGet, rootUrl) =>
         })
     );
 
-export { domain, processMeta, getMeta, processItems };
+export { domain, getMeta, processItems, processMeta };

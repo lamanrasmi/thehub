@@ -1,18 +1,17 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 export const route: Route = {
     path: '/:language/news/:category?',
-    categories: ['new-media', 'popular'],
+    categories: ['new-media'],
     example: '/dn/en-us/news',
     parameters: { language: 'Language, see below', category: 'Category, see below, The Latest by default' },
     features: {
@@ -28,18 +27,18 @@ export const route: Route = {
     handler,
     description: `#### Language
 
-  | English | 中文  |
-  | ------- | ----- |
-  | en-us   | zh-cn |
+| English | 中文  |
+| ------- | ----- |
+| en-us   | zh-cn |
 
-  #### Category
+#### Category
 
-  | English Category     | 中文分类 | Category id |
-  | -------------------- | -------- | ----------- |
-  | The Latest           | 最新     |             |
-  | Industry Information | 行业资讯 | category-1  |
-  | Knowledge            | 域名知识 | category-2  |
-  | Investment           | 域名投资 | category-3  |`,
+| English Category     | 中文分类 | Category id |
+| -------------------- | -------- | ----------- |
+| The Latest           | 最新     |             |
+| Industry Information | 行业资讯 | category-1  |
+| Knowledge            | 域名知识 | category-2  |
+| Investment           | 域名投资 | category-3  |`,
 };
 
 async function handler(ctx) {

@@ -1,10 +1,9 @@
-import { Route, ViewType } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
+import { ViewType } from '@/types';
 import got from '@/utils/got';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const STATUS_MAP = {
     up: '上涨',
@@ -13,7 +12,7 @@ const STATUS_MAP = {
 
 export const route: Route = {
     path: '/gushitong/index',
-    categories: ['finance', 'popular'],
+    categories: ['finance'],
     view: ViewType.Notifications,
     example: '/baidu/gushitong/index',
     parameters: {},

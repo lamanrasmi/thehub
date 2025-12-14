@@ -1,16 +1,15 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import cache from '@/utils/cache';
-import got from '@/utils/got';
-import { load } from 'cheerio';
-import timezone from '@/utils/timezone';
-import { parseDate } from '@/utils/parse-date';
-import { art } from '@/utils/render';
 import path from 'node:path';
+
+import { load } from 'cheerio';
+
 import ConfigNotFoundError from '@/errors/types/config-not-found';
 import InvalidParameterError from '@/errors/types/invalid-parameter';
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
+import got from '@/utils/got';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
+import timezone from '@/utils/timezone';
 
 const resolveRelativeLink = (link, baseUrl) => (link.startsWith('http') ? link : `${baseUrl}${link}`);
 
@@ -61,7 +60,8 @@ async function handler(ctx) {
         title = $('channel > title').text();
         description = $('channel > description').text();
         items = $('item')
-            .map((_, item) => {
+            .toArray()
+            .map((item) => {
                 const $item = $(item);
                 const link = $item.find('link').text();
                 // const pubDate = $item.find('pubDate').text();
@@ -69,21 +69,20 @@ async function handler(ctx) {
                     link,
                     // pubDate,  // no need to normalize because it's from a valid RSS feed
                 };
-            })
-            .get();
+            });
     } else {
         title = $('head > title').text();
         description = $('meta[name="description"]').attr('content');
         image = resolveRelativeLink($('head > link[rel="apple-touch-icon"]').attr('href'), rootUrl) || image;
         items = $('div.sec-latest > ul > li')
-            .map((_, item) => {
+            .toArray()
+            .map((item) => {
                 item = $(item);
                 const link = item.find('a').attr('href');
                 return {
                     link: resolveRelativeLink(link, rootUrl),
                 };
-            })
-            .get();
+            });
     }
 
     items = await Promise.all(
@@ -132,8 +131,8 @@ async function handler(ctx) {
                 }
 
                 item.category = $('p.credit > a')
-                    .map((_, a) => $(a).text())
-                    .get();
+                    .toArray()
+                    .map((a) => $(a).text());
                 return item;
             })
         )

@@ -1,11 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import got from '@/utils/got';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { load } from 'cheerio';
+
 const host = 'https://www.amazon.com';
 export const route: Route = {
     path: '/kindle/software-updates',
@@ -39,19 +39,20 @@ async function handler() {
 
     const $ = load(data);
     const list = $('.a-row.cs-help-landing-section.help-display-cond')
-        .map(function () {
-            const data = {};
-            data.title = $(this).find('.sectiontitle').text();
-            data.link = $(this).find('a').eq(0).attr('href');
-            data.version = $(this).find('li').first().text();
-            data.website = `${url}?nodeId=${nodeIdValue}`;
-            data.description = $(this)
-                .find('.a-column.a-span8')
-                .html()
-                .replaceAll(/[\t\n]/g, '');
+        .toArray()
+        .map((item) => {
+            const data = {
+                title: $(item).find('.sectiontitle').text(),
+                link: $(item).find('a').eq(0).attr('href'),
+                version: $(item).find('li').first().text(),
+                website: `${url}?nodeId=${nodeIdValue}`,
+                description: $(item)
+                    .find('.a-column.a-span8')
+                    .html()
+                    .replaceAll(/[\t\n]/g, ''),
+            };
             return data;
-        })
-        .get();
+        });
     return {
         title: 'Kindle E-Reader Software Updates',
         link: `${url}?nodeId=${nodeIdValue}`,

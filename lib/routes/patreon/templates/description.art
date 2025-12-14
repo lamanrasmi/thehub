@@ -21,7 +21,9 @@
     </audio><br>
 
 {{ else if attributes.post_type === 'video_embed' || attributes.post_type === 'link' }}
-    <img src="{{ attributes.image.url }}"><br>
+    <img src="{{ attributes.image?.url || attributes.meta_image_url }}"><br>
+
+{{ else if attributes.post_type === 'text_only' }}
 
 {{ else }}
 Post type: "{{ attributes.post_type }}" is not supported. <br>

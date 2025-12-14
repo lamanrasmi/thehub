@@ -1,12 +1,11 @@
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
+
+import { load } from 'cheerio';
 
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const rootUrl = 'http://www.caareviews.org';
 
@@ -14,12 +13,12 @@ const getList = async (url) => {
     const response = await got(url);
     const $ = load(response.data);
     const list = $('#infinite-content > div')
-        .map((_index, item) => ({
+        .toArray()
+        .map((item) => ({
             title: $(item).find('div.title').text().trim(),
             link: new URL($(item).find('div.title > em > a').attr('href'), rootUrl).href,
             author: $(item).find('div.contributors').text().trim(),
-        }))
-        .get();
+        }));
 
     return list;
 };
@@ -46,4 +45,4 @@ const getItems = (ctx, list) =>
         )
     );
 
-export { rootUrl, getList, getItems };
+export { getItems, getList, rootUrl };

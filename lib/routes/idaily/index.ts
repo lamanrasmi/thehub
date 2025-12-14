@@ -1,11 +1,11 @@
-import { Route } from '@/types';
-import got from '@/utils/got';
+import path from 'node:path';
+
 import { load } from 'cheerio';
+
+import type { Route } from '@/types';
+import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
 
 export const route: Route = {
     path: ['/:language?'],
@@ -20,8 +20,8 @@ export const route: Route = {
     ],
     handler,
     description: `| 简体中文 | 繁体中文 |
-  | -------- | -------- |
-  | zh-hans  | zh-hant  |`,
+| -------- | -------- |
+| zh-hans  | zh-hant  |`,
 };
 
 async function handler(ctx) {
@@ -55,7 +55,7 @@ async function handler(ctx) {
                     intro: item.content,
                 }),
                 author: item.location,
-                category: item.tags.map((c) => c.name),
+                category: item.tags?.map((c) => c.name),
                 guid: `idaily-${item.guid}`,
                 pubDate: parseDate(item.pubdate_timestamp, 'X'),
                 updated: parseDate(item.lastupdate_timestamp, 'X'),

@@ -1,12 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import dayjs from 'dayjs';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import dayjs from 'dayjs';
 import { art } from '@/utils/render';
-import path from 'node:path';
 
 const host = 'http://d.guduodata.com';
 

@@ -1,11 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import got from '@/utils/got';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { load } from 'cheerio';
+
 const host = 'https://www.snowpeak.com';
 export const route: Route = {
     path: '/us/new-arrivals',
@@ -41,9 +41,10 @@ async function handler() {
 
     const $ = load(data);
     const list = $('.element.product-tile')
-        .map(function () {
+        .toArray()
+        .map((element) => {
             const data = {};
-            const product = $(this).find('.product-data').data('product');
+            const product = $(element).find('.product-data').data('product');
             data.title = product.title;
             data.link = `${host}/products/${product.handle}`;
             data.pubDate = new Date(product.published_at).toUTCString();
@@ -56,8 +57,7 @@ async function handler() {
                 });
 
             return data;
-        })
-        .get();
+        });
     return {
         title: 'Snow Peak - New Arrivals',
         link: `${host}/new-arrivals`,

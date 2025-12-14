@@ -1,17 +1,16 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import cache from '@/utils/cache';
-import dayjs from 'dayjs';
-import { art } from '@/utils/render';
-import { parseDate } from '@/utils/parse-date';
-import timezone from '@/utils/timezone';
-import path from 'node:path';
-import { config } from '@/config';
-import puppeteer from '@/utils/puppeteer';
 import { createDecipheriv } from 'node:crypto';
+import path from 'node:path';
+
+import dayjs from 'dayjs';
+
+import { config } from '@/config';
 import InvalidParameterError from '@/errors/types/invalid-parameter';
+import type { Route } from '@/types';
+import cache from '@/utils/cache';
+import { parseDate } from '@/utils/parse-date';
+import puppeteer from '@/utils/puppeteer';
+import { art } from '@/utils/render';
+import timezone from '@/utils/timezone';
 
 // Parameters
 const CACHE_MAX_AGE = config.cache.contentExpire;
@@ -74,7 +73,7 @@ const searchLinkUrls = (keyword) => [
 const searchLinkNames = ['今日热榜', '百度', '谷歌', '知乎', '微博', '抖音', '头条'];
 
 const createContent = (keyword, queryList, queryListText) =>
-    art(path.join(__dirname, 'templates', 'content.art'), {
+    art(path.join(__dirname, 'templates/content.art'), {
         keyword,
         queryListText,
         queries: queryList.map((query) => ({
@@ -118,7 +117,7 @@ async function handler(ctx) {
             });
             await page.goto('https://trendinsight.oceanengine.com/arithmetic-index');
             const res = await getMultiKeywordHotTrend(page, keyword, start_date, end_date, channel);
-            browser.close();
+            await browser.close();
 
             const rawData = JSON.parse(res).data;
             const data = decrypt(rawData).hot_list[0];

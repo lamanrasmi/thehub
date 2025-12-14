@@ -1,16 +1,18 @@
-import { ViewType, type Data, type DataItem, type Route } from '@/types';
-import ofetch from '@/utils/ofetch';
-import { parseDate } from '@/utils/parse-date';
-import InvalidParameterError from '@/errors/types/invalid-parameter';
-import crypto from 'crypto';
-import type { Context } from 'hono';
-import type { DetailResponse, SearchResultItem } from './types';
-import cache from '@/utils/cache';
-import { getCurrentPath } from '@/utils/helpers';
-import { art } from '@/utils/render';
+import crypto from 'node:crypto';
 import path from 'node:path';
 
-const __dirname = getCurrentPath(import.meta.url);
+import type { Context } from 'hono';
+
+import InvalidParameterError from '@/errors/types/invalid-parameter';
+import type { Data, DataItem, Route } from '@/types';
+import { ViewType } from '@/types';
+import cache from '@/utils/cache';
+import ofetch from '@/utils/ofetch';
+import { parseDate } from '@/utils/parse-date';
+import { art } from '@/utils/render';
+
+import type { DetailResponse, SearchResultItem } from './types';
+
 const templatePath = path.join(__dirname, 'templates/bilingual.art');
 
 const baseURL = 'https://www.linkresearcher.com';
@@ -106,15 +108,14 @@ async function handler(ctx: Context): Promise<Data> {
                     pubDate: parseDate(response.onlineTime),
                     link,
                     image: response.cover,
+                    description:
+                        'zhTextList' in response && 'enTextList' in response
+                            ? art(templatePath, {
+                                  zh: response.zhTextList,
+                                  en: response.enTextList,
+                              })
+                            : response.content,
                 };
-
-                dataItem.description =
-                    'zhTextList' in response && 'enTextList' in response
-                        ? art(templatePath, {
-                              zh: response.zhTextList,
-                              en: response.enTextList,
-                          })
-                        : response.content;
 
                 if ('paperList' in response) {
                     const { doi, authors } = response.paperList[0];

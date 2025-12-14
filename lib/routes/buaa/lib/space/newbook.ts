@@ -1,13 +1,13 @@
-import { Data, DataItem, Route } from '@/types';
-import { Context } from 'hono';
+import path from 'node:path';
+
+import type { Context } from 'hono';
+
+import type { Data, DataItem, Route } from '@/types';
+import cache from '@/utils/cache';
 import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
-import timezone from '@/utils/timezone';
-import cache from '@/utils/cache';
 import { art } from '@/utils/render';
-import path from 'node:path';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import timezone from '@/utils/timezone';
 
 interface Book {
     bibId: string;

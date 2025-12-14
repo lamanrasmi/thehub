@@ -1,13 +1,13 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+
 import { domainValidation } from './utils';
 
 export const route: Route = {
@@ -22,6 +22,7 @@ export const route: Route = {
         supportBT: false,
         supportPodcast: false,
         supportScihub: false,
+        nsfw: true,
     },
     radar: [
         {
@@ -34,8 +35,8 @@ export const route: Route = {
     handler,
     url: '91porn.com/index.php',
     description: `| English | 简体中文 | 繁體中文 |
-  | ------- | -------- | -------- |
-  | en\_US  | cn\_CN   | zh\_ZH   |`,
+| ------- | -------- | -------- |
+| en\_US  | cn\_CN   | zh\_ZH   |`,
 };
 
 async function handler(ctx) {

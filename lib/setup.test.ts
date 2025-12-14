@@ -1,6 +1,6 @@
-import { afterAll, afterEach } from 'vitest';
-import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
+import { afterAll, afterEach } from 'vitest';
 
 const genWeChatMpPage = (rich_media_content: string, scripts: string[] | string) => {
     if (!Array.isArray(scripts)) {
@@ -48,10 +48,12 @@ const server = setupServer(
                 <li>
                     <a href="/1">1</a>
                     <div class="description">RSSHub1</div>
+                    <div class="date">2025-01-01</div>
                 </li>
                 <li>
                     <a href="/2">2</a>
                     <div class="description">RSSHub2</div>
+                    <div class="date">2025-01-02</div>
                 </li>
             </ul>
         </div>`)

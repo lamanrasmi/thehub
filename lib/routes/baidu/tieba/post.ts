@@ -1,13 +1,12 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
 import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import got from '@/utils/got';
 import { parseDate } from '@/utils/parse-date';
-import timezone from '@/utils/timezone';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 /**
  * 获取最新的帖子回复（倒序查看）
@@ -68,40 +67,36 @@ async function handler(ctx) {
         title: lz ? `【只看楼主】${title}` : title,
         link: `https://tieba.baidu.com/p/${id}?see_lz=${lz}`,
         description: `${title}的最新回复`,
-        item:
-            list &&
-            list
-                .map((_, element) => {
-                    const item = $(element);
-                    const { author, content } = item.data('field');
-                    const tempList = item
-                        .find('.post-tail-wrap > .tail-info')
-                        .toArray()
-                        .map((element) => $(element).text());
-                    let [pubContent, from, num, time] = ['', '', '', ''];
-                    if (0 === tempList.length && 'date' in content) {
-                        num = `${content.post_no}楼`;
-                        time = content.date;
-                        pubContent = item.find('.j_d_post_content').html();
-                    } else if (2 === tempList.length) {
-                        [num, time] = tempList;
-                        pubContent = content.content;
-                    } else if (3 === tempList.length) {
-                        [from, num, time] = tempList;
-                        pubContent = content.content;
-                    }
-                    return {
-                        title: `${author.user_name}回复了帖子《${title}》`,
-                        description: art(path.join(__dirname, '../templates/post.art'), {
-                            pubContent,
-                            author: author.user_name,
-                            num,
-                            from,
-                        }),
-                        pubDate: timezone(parseDate(time, 'YYYY-MM-DD hh:mm'), +8),
-                        link: `https://tieba.baidu.com/p/${id}?pid=${content.post_id}#${content.post_id}`,
-                    };
-                })
-                .get(),
+        item: list.toArray().map((element) => {
+            const item = $(element);
+            const { author, content } = item.data('field');
+            const tempList = item
+                .find('.post-tail-wrap > .tail-info')
+                .toArray()
+                .map((element) => $(element).text());
+            let [pubContent, from, num, time] = ['', '', '', ''];
+            if (0 === tempList.length && 'date' in content) {
+                num = `${content.post_no}楼`;
+                time = content.date;
+                pubContent = item.find('.j_d_post_content').html();
+            } else if (2 === tempList.length) {
+                [num, time] = tempList;
+                pubContent = content.content;
+            } else if (3 === tempList.length) {
+                [from, num, time] = tempList;
+                pubContent = content.content;
+            }
+            return {
+                title: `${author.user_name}回复了帖子《${title}》`,
+                description: art(path.join(__dirname, '../templates/post.art'), {
+                    pubContent,
+                    author: author.user_name,
+                    num,
+                    from,
+                }),
+                pubDate: timezone(parseDate(time, 'YYYY-MM-DD hh:mm'), +8),
+                link: `https://tieba.baidu.com/p/${id}?pid=${content.post_id}#${content.post_id}`,
+            };
+        }),
     };
 }

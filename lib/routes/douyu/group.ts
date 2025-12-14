@@ -1,12 +1,10 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import type { Route } from '@/types';
 import got from '@/utils/got';
-import timezone from '@/utils/timezone';
 import { parseDate } from '@/utils/parse-date';
 import { art } from '@/utils/render';
-import path from 'node:path';
+import timezone from '@/utils/timezone';
 
 export const route: Route = {
     path: '/group/:id/:sort?',
@@ -31,8 +29,8 @@ export const route: Route = {
     maintainers: ['nczitzk'],
     handler,
     description: `| 回复时间排序 | 发布时间排序 |
-  | ------------ | ------------ |
-  | 1            | 2            |`,
+| ------------ | ------------ |
+| 1            | 2            |`,
 };
 
 async function handler(ctx) {

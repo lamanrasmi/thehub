@@ -1,12 +1,11 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
+import path from 'node:path';
 
+import { load } from 'cheerio';
+
+import type { Route } from '@/types';
 import cache from '@/utils/cache';
 import got from '@/utils/got';
-import { load } from 'cheerio';
 import { parseDate } from '@/utils/parse-date';
-import path from 'node:path';
 import { art } from '@/utils/render';
 
 const rootUrl = 'https://hk.on.cc';
@@ -70,7 +69,8 @@ async function handler(ctx) {
     const response = await got.get(newsUrl);
     const $ = load(response.data);
     const list = $('#focusNews > div.focusItem[type=article]')
-        .map((_, item) => {
+        .toArray()
+        .map((item) => {
             const title = $(item).find('div.focusTitle > span').text();
             const link = rootUrl + $(item).find('a:nth-child(1)').attr('href');
             const pubDate = parseDate($(item).attr('edittime'), 'YYYYMMDDHHmmss');
@@ -80,8 +80,7 @@ async function handler(ctx) {
                 link,
                 pubDate,
             };
-        })
-        .get();
+        });
 
     const items = await Promise.all(
         list.map(async (item) => {

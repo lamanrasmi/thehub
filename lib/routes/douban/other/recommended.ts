@@ -1,11 +1,9 @@
-import { Route } from '@/types';
-import { getCurrentPath } from '@/utils/helpers';
-const __dirname = getCurrentPath(import.meta.url);
-
-import got from '@/utils/got';
 import path from 'node:path';
-import { art } from '@/utils/render';
+
+import type { Route } from '@/types';
+import got from '@/utils/got';
 import { fallback, queryToInteger } from '@/utils/readable-social';
+import { art } from '@/utils/render';
 
 export const route: Route = {
     path: '/recommended/:type?/:routeParams?',
@@ -24,9 +22,9 @@ export const route: Route = {
     maintainers: ['honue'],
     handler,
     description: `| 额外参数 | 含义                   | 接受的值 | 默认值 |
-  | -------- | ---------------------- | -------- | ------ |
-  | playable | 仅看有可播放片源的影片 | 0/1      | 0      |
-  | score    | 筛选评分               | 0-10     | 0      |
+| -------- | ---------------------- | -------- | ------ |
+| playable | 仅看有可播放片源的影片 | 0/1      | 0      |
+| score    | 筛选评分               | 0-10     | 0      |
 
   用例：\`/douban/recommended/tv/playable=0&score=8\`
 
